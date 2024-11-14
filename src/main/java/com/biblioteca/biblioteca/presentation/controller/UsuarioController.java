@@ -3,23 +3,23 @@ package com.biblioteca.biblioteca.presentation.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import com.biblioteca.biblioteca.domain.dto.UsuarioDTO;
 import com.biblioteca.biblioteca.domain.service.IUsuarioService;
 import com.biblioteca.biblioteca.shared.CustomException;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/usuarios")
-@Tag(name = "Usuario", description = "APIs relacionadas a usuários")
-
+@Tag(name = "Usuario", description = "APIs relacionadas a Usuários")
 public class UsuarioController {
 
     @Autowired
     private IUsuarioService usuarioService;
 
     @PostMapping
-  
     public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         try {
             UsuarioDTO savedUsuario = usuarioService.cadastrarUsuario(usuarioDTO);

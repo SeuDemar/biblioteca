@@ -1,5 +1,9 @@
 package com.biblioteca.biblioteca.application.service;
 
+import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +13,6 @@ import com.biblioteca.biblioteca.domain.entity.Usuario;
 import com.biblioteca.biblioteca.domain.repository.IUsuarioRepository;
 import com.biblioteca.biblioteca.domain.service.IUsuarioService;
 import com.biblioteca.biblioteca.shared.CustomException;
-import java.util.stream.Collectors;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UsuarioService implements IUsuarioService {
