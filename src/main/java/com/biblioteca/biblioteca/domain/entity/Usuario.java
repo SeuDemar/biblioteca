@@ -34,8 +34,7 @@ public class Usuario {
 
     @Column(name = "data_cadastro", nullable = false)
     private LocalDate dataCadastro;
-    
+
     @Column(name = "quantidade_livros_emprestados", nullable = false)
     private int quantidadeLivrosEmprestados;
-
 }

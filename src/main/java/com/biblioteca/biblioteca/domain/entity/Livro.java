@@ -34,7 +34,7 @@ public class Livro {
     @Column(nullable = false)
     private String editora;
 
-    @Column(name = "ano_publicacao", nullable = false)
+    @Column(name = "ano_publicacao")
     private int anoPublicacao;
 
     @Column(nullable = false)
