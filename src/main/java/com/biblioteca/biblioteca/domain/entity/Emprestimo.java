@@ -30,12 +30,12 @@ public class Emprestimo {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private long idUsuario;
+    @JoinColumn(name = "id_usuario", nullable = false)  
+    private Usuario usuario;  
 
     @ManyToOne
-    @JoinColumn(name = "id_livro")
-    private long idLivro;
+    @JoinColumn(name = "id_livro", nullable = false) 
+    private Livro livro;  
 
     @Column(name = "data_emprestimo", nullable = false)
     private LocalDate dataEmprestimo;
