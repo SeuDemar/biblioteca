@@ -30,7 +30,6 @@ public class UsuarioController {
     }
 
     @PutMapping("/{idUsuario}")
-    
     public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long idUsuario, @RequestBody UsuarioDTO usuarioAtualizado) {
         try {
             UsuarioDTO updatedUsuario = usuarioService.atualizarUsuario(idUsuario, usuarioAtualizado);

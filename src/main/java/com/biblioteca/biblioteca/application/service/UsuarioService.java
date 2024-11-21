@@ -43,14 +43,13 @@ public class UsuarioService implements IUsuarioService {
             throw new CustomException("Usuário não encontrado com o ID: " + id);
         }
 
-        // Atualiza os dados do usuário existente com as informações do DTO
         Usuario usuario = usuarioExistente.get();
         usuario.setNome(usuarioAtualizado.getNome());
         usuario.setEmail(usuarioAtualizado.getEmail());
-      // Salva o usuário atualizado no repositório
+
         usuario = usuarioRepository.save(usuario);
 
-        // Retorna o DTO atualizado mapeado a partir da entidade salva
+
         return usuarioMapper.UsuariotoDto(usuario);
     }
 
