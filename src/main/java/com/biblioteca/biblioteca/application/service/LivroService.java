@@ -54,6 +54,16 @@ public class LivroService implements ILivroService {
     }
 
     @Override
+    public List<LivroDTO> listarLivrosEmprestados() {
+
+        List<Livro> livrosDisponiveis = livroRepository.findByDisponibilidadeFalse();
+        
+        return livrosDisponiveis.stream()
+                .map(livroMapper::LivrotoDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public LivroDTO buscarPorTitulo(String titulo) {
         Optional<Livro> livro = livroRepository.findByTitulo(titulo);
 
@@ -66,11 +76,10 @@ public class LivroService implements ILivroService {
 
     @Override
     public LivroDTO cadastrarLivro(LivroDTO livroDTO) {
-        // Mapeia o DTO para a entidade e salva no banco de dados
+   
         Livro livro = livroMapper.LivroDTOtoEntity(livroDTO);
         livro = livroRepository.save(livro);
 
-        // Retorna o DTO mapeado a partir da entidade salva
         return livroMapper.LivrotoDto(livro);
     }
 

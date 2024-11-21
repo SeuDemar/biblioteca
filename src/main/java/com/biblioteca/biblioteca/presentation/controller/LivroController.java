@@ -54,9 +54,15 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/disponibilidade")
+    @GetMapping("/LivrosDisponiveis")
     public ResponseEntity<List<LivroDTO>> listarLivrosDisponiveis() {
         List<LivroDTO> livrosDisponiveis = livroService.listarLivrosDisponiveis();
+        return ResponseEntity.ok(livrosDisponiveis);
+    }
+
+    @GetMapping("/LivrosEmprestados")
+    public ResponseEntity<List<LivroDTO>> listarLivrosEmprestados() {
+        List<LivroDTO> livrosDisponiveis = livroService.listarLivrosEmprestados();
         return ResponseEntity.ok(livrosDisponiveis);
     }
 

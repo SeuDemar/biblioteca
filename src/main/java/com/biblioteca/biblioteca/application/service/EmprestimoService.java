@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.biblioteca.biblioteca.application.Mappers;
 import com.biblioteca.biblioteca.domain.dto.EmprestimoDTO;
+import com.biblioteca.biblioteca.domain.dto.LivroDTO;
 import com.biblioteca.biblioteca.domain.entity.Emprestimo;
+import com.biblioteca.biblioteca.domain.entity.Livro;
 import com.biblioteca.biblioteca.domain.repository.IEmprestimoRepository;
 import com.biblioteca.biblioteca.domain.service.IEmprestimoService;
 import com.biblioteca.biblioteca.shared.CustomException;
@@ -33,6 +35,18 @@ public class EmprestimoService implements IEmprestimoService{
 
         return emprestimoMapper.EmprestimotoDto(emprestimo.get());
     }
+
+    @Override
+    public List<EmprestimoDTO> listarTodosEmprestimos() {
+        // Utiliza o repositório para pegar livros com disponibilidade true
+        List<Emprestimo> emprestimoDisponiveis = emprestimoRepository.findAll();
+        
+        // Converte os livros disponíveis para DTO
+        return emprestimoDisponiveis.stream()
+                .map(emprestimoMapper::EmprestimotoDto)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public List<EmprestimoDTO> listarPorIdUsuario(Long idUsuario) {

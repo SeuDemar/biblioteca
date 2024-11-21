@@ -12,6 +12,8 @@ public interface ILivroService {
 
     List<LivroDTO> listarLivrosDisponiveis();
 
+    List<LivroDTO> listarLivrosEmprestados();
+
     List<LivroDTO> listarTodosLivros();
 
     LivroDTO cadastrarLivro(LivroDTO livroDTO);

@@ -11,4 +11,6 @@ public interface ILivroRepository extends JpaRepository<Livro, Long>{
     Optional<Livro> findByTitulo(String titulo);
 
     List<Livro> findByDisponibilidadeTrue();
+
+    List<Livro> findByDisponibilidadeFalse();
 }

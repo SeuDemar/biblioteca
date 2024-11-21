@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.biblioteca.biblioteca.domain.dto.EmprestimoDTO;
+import com.biblioteca.biblioteca.domain.dto.LivroDTO;
 import com.biblioteca.biblioteca.domain.service.IEmprestimoService;
 import com.biblioteca.biblioteca.shared.CustomException;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
@@ -21,13 +23,23 @@ public class EmprestimoController {
     @Autowired
     private IEmprestimoService emprestimoService;
 
-
+    @Operation(summary = "Buscar empréstimo por ID", description = "Retorna os detalhes de um empréstimo baseado no ID fornecido.")
     @GetMapping("/{idEmprestimo}")
     public ResponseEntity<EmprestimoDTO> buscarPorId(@PathVariable Long id) {
         try {
             EmprestimoDTO emprestimo = emprestimoService.buscarPorId(id);
             return ResponseEntity.ok(emprestimo);
         } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EmprestimoDTO>> listarTodosLivros() {
+        try {
+            List<EmprestimoDTO> emprestimo = emprestimoService.listarTodosEmprestimos();
+            return ResponseEntity.ok(emprestimo);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
