@@ -24,6 +24,36 @@ public class LivroService implements ILivroService {
     private Mappers livroMapper;
 
     @Override
+    public LivroDTO buscarPorId(Long id) {
+        Optional<Livro> livro = livroRepository.findById(id);
+
+        if (livro.isEmpty()) {
+            throw new CustomException("Livro não encontrado com o ID: " + id);
+        }
+
+        return livroMapper.LivrotoDto(livro.get());
+    }
+
+    @Override
+    public List<LivroDTO> listarTodosLivros() {
+        List<Livro> livros = livroRepository.findAll();
+        return livros.stream()
+                .map(livroMapper::LivrotoDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public LivroDTO buscarPorTitulo(String titulo) {
+        Optional<Livro> livro = livroRepository.findByTitulo(titulo);
+
+        if (livro.isEmpty()) {
+            throw new CustomException("Livro nao encontrado com o titulo: " + titulo);
+        }
+
+        return livroMapper.LivrotoDto(livro.get());
+    }
+
+    @Override
     public LivroDTO cadastrarLivro(LivroDTO livroDTO) {
         // Mapeia o DTO para a entidade e salva no banco de dados
         Livro livro = livroMapper.LivroDTOtoEntity(livroDTO);
@@ -32,6 +62,7 @@ public class LivroService implements ILivroService {
         // Retorna o DTO mapeado a partir da entidade salva
         return livroMapper.LivrotoDto(livro);
     }
+
 
     @Override
     public LivroDTO atualizarLivro(Long id, LivroDTO livroAtualizado) {
@@ -61,35 +92,7 @@ public class LivroService implements ILivroService {
         livroRepository.deleteById(id);
     }
 
-    @Override
-    public List<LivroDTO> listarTodosLivros() {
-        List<Livro> livros = livroRepository.findAll();
-        return livros.stream()
-                .map(livroMapper::LivrotoDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public LivroDTO buscarPorId(Long id) {
-        Optional<Livro> livro = livroRepository.findById(id);
-
-        if (livro.isEmpty()) {
-            throw new CustomException("Livro não encontrado com o ID: " + id);
-        }
-
-        return livroMapper.LivrotoDto(livro.get());
-    }
-
-    @Override
-    public LivroDTO buscarPorTitulo(String titulo) {
-        Optional<Livro> livro = livroRepository.findByTitulo(titulo);
-
-        if (livro.isEmpty()) {
-            throw new CustomException("Livro nao encontrado com o titulo: " + titulo);
-        }
-
-        return livroMapper.LivrotoDto(livro.get());
-    }
+    
 
 }
 

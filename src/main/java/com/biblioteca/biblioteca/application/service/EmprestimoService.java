@@ -23,7 +23,26 @@ public class EmprestimoService implements IEmprestimoService{
     @Autowired
     private Mappers emprestimoMapper;
     
+    @Override
+    public EmprestimoDTO buscarPorId(Long id) {
+        Optional<Emprestimo> emprestimo = emprestimoRepository.findById(id);
 
+        if (emprestimo.isEmpty()) {
+            throw new CustomException("Livro não encontrado com o ID: " + id);
+        }
+
+        return emprestimoMapper.EmprestimotoDto(emprestimo.get());
+    }
+
+    @Override
+    public List<EmprestimoDTO> listarPorIdUsuario(Long idUsuario) {
+        List<Emprestimo> emprestimos = emprestimoRepository.findByUsuarioIdUsuario(idUsuario);
+
+        return emprestimos.stream()
+                .map(emprestimoMapper::EmprestimotoDto)
+                .collect(Collectors.toList());
+    }
+    
     @Override
     public EmprestimoDTO registrarEmprestimo(EmprestimoDTO emprestimoDTO) {
         Emprestimo emprestimo = emprestimoMapper.EmprestimoDTOtoEntity(emprestimoDTO);
@@ -48,26 +67,6 @@ public class EmprestimoService implements IEmprestimoService{
         emprestimo = emprestimoRepository.save(emprestimo);
 
         return emprestimoMapper.EmprestimotoDto(emprestimo);
-    }
-
-    @Override
-    public EmprestimoDTO buscarPorId(Long id) {
-        Optional<Emprestimo> emprestimo = emprestimoRepository.findById(id);
-
-        if (emprestimo.isEmpty()) {
-            throw new CustomException("Livro não encontrado com o ID: " + id);
-        }
-
-        return emprestimoMapper.EmprestimotoDto(emprestimo.get());
-    }
-
-    @Override
-    public List<EmprestimoDTO> listarPorIdUsuario(Long idUsuario) {
-        List<Emprestimo> emprestimos = emprestimoRepository.findByUsuarioIdUsuario(idUsuario);
-
-        return emprestimos.stream()
-                .map(emprestimoMapper::EmprestimotoDto)
-                .collect(Collectors.toList());
     }
 
 }

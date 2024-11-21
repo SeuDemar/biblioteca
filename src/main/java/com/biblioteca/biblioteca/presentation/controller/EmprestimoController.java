@@ -22,7 +22,7 @@ public class EmprestimoController {
     private IEmprestimoService emprestimoService;
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idEmprestimo}")
     public ResponseEntity<EmprestimoDTO> buscarPorId(@PathVariable Long id) {
         try {
             EmprestimoDTO emprestimo = emprestimoService.buscarPorId(id);
@@ -32,7 +32,7 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/usuario/{idUsuario}")
+    @GetMapping("/{idUsuario}")
     public ResponseEntity<List<EmprestimoDTO>> listarPorIdUsuario(@PathVariable Long idUsuario) {
         try {
             List<EmprestimoDTO> emprestimos = emprestimoService.listarPorIdUsuario(idUsuario);
@@ -52,7 +52,7 @@ public class EmprestimoController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idEmprestimo}")
     public ResponseEntity<EmprestimoDTO> atualizarEmprestimo(@PathVariable Long id, @RequestBody EmprestimoDTO dataPrevistaAtualizado) {
         try {
             EmprestimoDTO updatedEmprestimo = emprestimoService.atualizarEmprestimo(id, dataPrevistaAtualizado);

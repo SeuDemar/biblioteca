@@ -23,18 +23,50 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private Mappers usuarioMapper;
 
-    // Cadastrar um novo usuário
+    @Override
+    public UsuarioDTO buscarPorId(Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+
+        if (usuario.isEmpty()) {
+            throw new CustomException("Usuário não encontrado com o ID: " + id);
+        }
+
+
+        return usuarioMapper.UsuariotoDto(usuario.get());
+    }
+
+    @Override
+    public List<UsuarioDTO> listarTodosUsuarios() {
+
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        return usuarios.stream()
+                .map(usuarioMapper::UsuariotoDto) 
+                .collect(Collectors.toList()); 
+    }
+
+    @Override
+    public UsuarioDTO buscarPorEmail(String email) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+
+        if (usuario.isEmpty()) {
+            throw new CustomException("Usuário não encontrado com o email: " + email);
+        }
+
+
+        return usuarioMapper.UsuariotoDto(usuario.get());
+    }
+
     @Override
     public UsuarioDTO cadastrarUsuario(UsuarioDTO usuarioDTO) {
-        // Mapeia o DTO para a entidade e salva no banco de dados
+    
         Usuario usuario = usuarioMapper.UsuarioDTOtoEntity(usuarioDTO);
         usuario = usuarioRepository.save(usuario);
 
-        // Retorna o DTO mapeado a partir da entidade salva
+
         return usuarioMapper.UsuariotoDto(usuario);
     }
 
-    // Atualizar um usuário existente
+ 
     @Override
     public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioAtualizado) {
         Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
@@ -53,7 +85,7 @@ public class UsuarioService implements IUsuarioService {
         return usuarioMapper.UsuariotoDto(usuario);
     }
 
-    // Remover um usuário pelo ID
+  
     @Override
     public void removerUsuario(Long id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
@@ -63,42 +95,6 @@ public class UsuarioService implements IUsuarioService {
         }
 
         usuarioRepository.deleteById(id);
-    }
-
-    // Listar todos os usuários
-    @Override
-    public List<UsuarioDTO> listarTodosUsuarios() {
-        // Obtém a lista de entidades de usuários e a converte para uma lista de DTOs
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        return usuarios.stream()
-                .map(usuarioMapper::UsuariotoDto) // Mapeia cada entidade para seu DTO correspondente
-                .collect(Collectors.toList()); // Coleta os resultados em uma lista de DTOs
-    }
-
-    // Buscar usuário por ID
-    @Override
-    public UsuarioDTO buscarPorId(Long id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-
-        if (usuario.isEmpty()) {
-            throw new CustomException("Usuário não encontrado com o ID: " + id);
-        }
-
-        // Retorna o DTO mapeado a partir da entidade encontrada
-        return usuarioMapper.UsuariotoDto(usuario.get());
-    }
-
-    // Buscar usuário por email
-    @Override
-    public UsuarioDTO buscarPorEmail(String email) {
-        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
-
-        if (usuario.isEmpty()) {
-            throw new CustomException("Usuário não encontrado com o email: " + email);
-        }
-
-        // Retorna o DTO mapeado a partir da entidade encontrada
-        return usuarioMapper.UsuariotoDto(usuario.get());
     }
 
 }

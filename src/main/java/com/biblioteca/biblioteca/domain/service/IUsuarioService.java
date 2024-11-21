@@ -5,16 +5,16 @@ import com.biblioteca.biblioteca.domain.dto.UsuarioDTO;
 
 public interface IUsuarioService {
     
+    UsuarioDTO buscarPorId(Long id);
+
+    UsuarioDTO buscarPorEmail(String email);
+    
+    List<UsuarioDTO> listarTodosUsuarios();
+   
     UsuarioDTO cadastrarUsuario(UsuarioDTO usuarioDTO);
 
     UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioAtualizado);
 
     void removerUsuario(Long id);
-
-    List<UsuarioDTO> listarTodosUsuarios();
-
-    UsuarioDTO buscarPorId(Long id);
-
-    UsuarioDTO buscarPorEmail(String email);
 }
 
