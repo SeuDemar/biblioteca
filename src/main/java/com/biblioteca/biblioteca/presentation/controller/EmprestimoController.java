@@ -21,6 +21,27 @@ public class EmprestimoController {
     @Autowired
     private IEmprestimoService emprestimoService;
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EmprestimoDTO> buscarPorId(@PathVariable Long id) {
+        try {
+            EmprestimoDTO emprestimo = emprestimoService.buscarPorId(id);
+            return ResponseEntity.ok(emprestimo);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<List<EmprestimoDTO>> listarPorIdUsuario(@PathVariable Long idUsuario) {
+        try {
+            List<EmprestimoDTO> emprestimos = emprestimoService.listarPorIdUsuario(idUsuario);
+            return ResponseEntity.ok(emprestimos);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<EmprestimoDTO> registrarEmprestimo(@RequestBody EmprestimoDTO emprestimoDTO) {
         try {
@@ -42,25 +63,4 @@ public class EmprestimoController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-
-    @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<EmprestimoDTO>> buscarPorUsuario(@PathVariable Long idUsuario) {
-        try {
-            List<EmprestimoDTO> emprestimos = emprestimoService.listarPorIdUsuario(idUsuario);
-            return ResponseEntity.ok(emprestimos);
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<EmprestimoDTO> buscarPorId(@PathVariable Long id) {
-        try {
-            EmprestimoDTO emprestimo = emprestimoService.buscarPorId(id);
-            return ResponseEntity.ok(emprestimo);
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
 }

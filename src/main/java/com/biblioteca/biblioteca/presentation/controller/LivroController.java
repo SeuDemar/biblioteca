@@ -20,6 +20,40 @@ public class LivroController {
     @Autowired
     private ILivroService livroService;
 
+    @GetMapping
+    public ResponseEntity<List<LivroDTO>> listarTodosLivros() {
+        try {
+            List<LivroDTO> livros = livroService.listarTodosLivros();
+            return ResponseEntity.ok(livros);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/{idLivro}")
+    public ResponseEntity<LivroDTO> buscarPorId(@PathVariable Long idLivro) {
+        try {
+            LivroDTO livro = livroService.buscarPorId(idLivro);
+            return ResponseEntity.ok(livro);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/titulo/{titulo}")
+    public ResponseEntity<LivroDTO> buscarPorTitulo(@PathVariable String titulo) {
+        try {
+            LivroDTO livro = livroService.buscarPorTitulo(titulo);
+            return ResponseEntity.ok(livro);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+    
     @PostMapping
     public ResponseEntity<LivroDTO> cadastrarLivro(@RequestBody LivroDTO livroDTO) {
         try {
@@ -54,38 +88,6 @@ public class LivroController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<LivroDTO>> listarTodosLivros() {
-        try {
-            List<LivroDTO> livros = livroService.listarTodosLivros();
-            return ResponseEntity.ok(livros);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    @GetMapping("/{idLivro}")
-    public ResponseEntity<LivroDTO> buscarPorId(@PathVariable Long idLivro) {
-        try {
-            LivroDTO livro = livroService.buscarPorId(idLivro);
-            return ResponseEntity.ok(livro);
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(null);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    @GetMapping("/titulo/{titulo}")
-    public ResponseEntity<LivroDTO> buscarPorTitulo(@PathVariable String titulo) {
-        try {
-            LivroDTO livro = livroService.buscarPorTitulo(titulo);
-            return ResponseEntity.ok(livro);
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(null);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
+   
 
 }

@@ -19,6 +19,41 @@ public class UsuarioController {
     @Autowired
     private IUsuarioService usuarioService;
 
+    @GetMapping
+
+    public ResponseEntity<List<UsuarioDTO>> listarTodosUsuarios() {
+        try {
+            List<UsuarioDTO> usuarios = usuarioService.listarTodosUsuarios();
+            return ResponseEntity.ok(usuarios);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long idUsuario) {
+        try {
+            UsuarioDTO usuario = usuarioService.buscarPorId(idUsuario);
+            return ResponseEntity.ok(usuario);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UsuarioDTO> buscarPorEmail(@PathVariable String email) {
+        try {
+            UsuarioDTO usuario = usuarioService.buscarPorEmail(email);
+            return ResponseEntity.ok(usuario);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         try {
@@ -54,38 +89,4 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping
-
-    public ResponseEntity<List<UsuarioDTO>> listarTodosUsuarios() {
-        try {
-            List<UsuarioDTO> usuarios = usuarioService.listarTodosUsuarios();
-            return ResponseEntity.ok(usuarios);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long idUsuario) {
-        try {
-            UsuarioDTO usuario = usuarioService.buscarPorId(idUsuario);
-            return ResponseEntity.ok(usuario);
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(null);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<UsuarioDTO> buscarPorEmail(@PathVariable String email) {
-        try {
-            UsuarioDTO usuario = usuarioService.buscarPorEmail(email);
-            return ResponseEntity.ok(usuario);
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(null);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
 }
