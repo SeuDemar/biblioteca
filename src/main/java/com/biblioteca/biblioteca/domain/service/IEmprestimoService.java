@@ -10,10 +10,12 @@ public interface IEmprestimoService {
 
     List<EmprestimoDTO> listarPorIdUsuario(Long idUsuario);
 
+    List<EmprestimoDTO> listarPorIdLivro(Long idLivro);
+
     List<EmprestimoDTO> listarTodosEmprestimos();
 
     EmprestimoDTO registrarEmprestimo(EmprestimoDTO emprestimoDTO);
 
-    EmprestimoDTO atualizarEmprestimo(Long id, EmprestimoDTO dataPrevistaAtualizado);
+    EmprestimoDTO entregarLivro(Long id, EmprestimoDTO livroEntregue);
 
 }

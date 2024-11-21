@@ -7,13 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.biblioteca.biblioteca.domain.dto.EmprestimoDTO;
-import com.biblioteca.biblioteca.domain.dto.LivroDTO;
 import com.biblioteca.biblioteca.domain.service.IEmprestimoService;
 import com.biblioteca.biblioteca.shared.CustomException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 
 @RestController
 @RequestMapping("api/emprestimo")
@@ -44,7 +42,18 @@ public class EmprestimoController {
         }
     }
 
-    @GetMapping("/{idUsuario}")
+    @GetMapping("/livro/{idLivro}")
+    public ResponseEntity<List<EmprestimoDTO>> listarPorIdLivro(@PathVariable Long idLivro) {
+        try {
+            List<EmprestimoDTO> emprestimos = emprestimoService.listarPorIdLivro(idLivro);
+            return ResponseEntity.ok(emprestimos);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+    
+
+    @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<List<EmprestimoDTO>> listarPorIdUsuario(@PathVariable Long idUsuario) {
         try {
             List<EmprestimoDTO> emprestimos = emprestimoService.listarPorIdUsuario(idUsuario);
@@ -65,9 +74,9 @@ public class EmprestimoController {
     }
 
     @PutMapping("/{idEmprestimo}")
-    public ResponseEntity<EmprestimoDTO> atualizarEmprestimo(@PathVariable Long id, @RequestBody EmprestimoDTO dataPrevistaAtualizado) {
+    public ResponseEntity<EmprestimoDTO> entregarLivro(@PathVariable Long id, @RequestBody EmprestimoDTO livroEntregue) {
         try {
-            EmprestimoDTO updatedEmprestimo = emprestimoService.atualizarEmprestimo(id, dataPrevistaAtualizado);
+            EmprestimoDTO updatedEmprestimo = emprestimoService.entregarLivro(id, livroEntregue);
             return ResponseEntity.ok(updatedEmprestimo);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(null);
