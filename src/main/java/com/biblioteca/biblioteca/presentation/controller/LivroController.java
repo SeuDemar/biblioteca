@@ -53,7 +53,13 @@ public class LivroController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-    
+
+    @GetMapping("/disponibilidade")
+    public ResponseEntity<List<LivroDTO>> listarLivrosDisponiveis() {
+        List<LivroDTO> livrosDisponiveis = livroService.listarLivrosDisponiveis();
+        return ResponseEntity.ok(livrosDisponiveis);
+    }
+
     @PostMapping
     public ResponseEntity<LivroDTO> cadastrarLivro(@RequestBody LivroDTO livroDTO) {
         try {

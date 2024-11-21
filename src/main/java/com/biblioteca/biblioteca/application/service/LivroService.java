@@ -43,6 +43,17 @@ public class LivroService implements ILivroService {
     }
 
     @Override
+    public List<LivroDTO> listarLivrosDisponiveis() {
+        // Utiliza o repositório para pegar livros com disponibilidade true
+        List<Livro> livrosDisponiveis = livroRepository.findByDisponibilidadeTrue();
+        
+        // Converte os livros disponíveis para DTO
+        return livrosDisponiveis.stream()
+                .map(livroMapper::LivrotoDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public LivroDTO buscarPorTitulo(String titulo) {
         Optional<Livro> livro = livroRepository.findByTitulo(titulo);
 

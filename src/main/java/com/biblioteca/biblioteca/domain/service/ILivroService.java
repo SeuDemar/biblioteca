@@ -9,7 +9,9 @@ public interface ILivroService {
     LivroDTO buscarPorId(Long id);
 
     LivroDTO buscarPorTitulo(String titulo);
-    
+
+    List<LivroDTO> listarLivrosDisponiveis();
+
     List<LivroDTO> listarTodosLivros();
 
     LivroDTO cadastrarLivro(LivroDTO livroDTO);
