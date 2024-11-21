@@ -30,10 +30,10 @@ public class LivroController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<LivroDTO> atualizarLivro(@PathVariable Long id, @RequestBody LivroDTO livroAtualizado) {
+    @PutMapping("/{idLivro}")
+    public ResponseEntity<LivroDTO> atualizarLivro(@PathVariable Long idLivro, @RequestBody LivroDTO livroAtualizado) {
         try {
-            LivroDTO updatedLivro = livroService.atualizarLivro(id, livroAtualizado);
+            LivroDTO updatedLivro = livroService.atualizarLivro(idLivro, livroAtualizado);
             return ResponseEntity.ok(updatedLivro);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(null);
@@ -42,10 +42,10 @@ public class LivroController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removerLivro(@PathVariable Long id) {
+    @DeleteMapping("/{idLivro}")
+    public ResponseEntity<Void> removerLivro(@PathVariable Long idLivro) {
         try {
-            livroService.removerLivro(id);
+            livroService.removerLivro(idLivro);
             return ResponseEntity.noContent().build();
         } catch (CustomException e) {
             return ResponseEntity.badRequest().build();
@@ -64,10 +64,10 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<LivroDTO> buscarPorId(@PathVariable Long id) {
+    @GetMapping("/{idLivro}")
+    public ResponseEntity<LivroDTO> buscarPorId(@PathVariable Long idLivro) {
         try {
-            LivroDTO livro = livroService.buscarPorId(id);
+            LivroDTO livro = livroService.buscarPorId(idLivro);
             return ResponseEntity.ok(livro);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(null);
@@ -76,7 +76,7 @@ public class LivroController {
         }
     }
 
-    @GetMapping("/titulo/{livro}")
+    @GetMapping("/titulo/{titulo}")
     public ResponseEntity<LivroDTO> buscarPorTitulo(@PathVariable String titulo) {
         try {
             LivroDTO livro = livroService.buscarPorTitulo(titulo);

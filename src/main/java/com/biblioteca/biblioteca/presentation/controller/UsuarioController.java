@@ -29,11 +29,11 @@ public class UsuarioController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idUsuario}")
     
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioAtualizado) {
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long idUsuario, @RequestBody UsuarioDTO usuarioAtualizado) {
         try {
-            UsuarioDTO updatedUsuario = usuarioService.atualizarUsuario(id, usuarioAtualizado);
+            UsuarioDTO updatedUsuario = usuarioService.atualizarUsuario(idUsuario, usuarioAtualizado);
             return ResponseEntity.ok(updatedUsuario);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(null);
@@ -42,11 +42,11 @@ public class UsuarioController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idUsuario}")
    
-    public ResponseEntity<Void> removerUsuario(@PathVariable Long id) {
+    public ResponseEntity<Void> removerUsuario(@PathVariable Long idUsuario) {
         try {
-            usuarioService.removerUsuario(id);
+            usuarioService.removerUsuario(idUsuario);
             return ResponseEntity.noContent().build();
         } catch (CustomException e) {
             return ResponseEntity.badRequest().build();
@@ -66,10 +66,10 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id) {
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long idUsuario) {
         try {
-            UsuarioDTO usuario = usuarioService.buscarPorId(id);
+            UsuarioDTO usuario = usuarioService.buscarPorId(idUsuario);
             return ResponseEntity.ok(usuario);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(null);

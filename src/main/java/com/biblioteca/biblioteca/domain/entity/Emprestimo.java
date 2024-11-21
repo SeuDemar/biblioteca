@@ -27,14 +27,15 @@ public class Emprestimo {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "id_emprestimo", nullable = false)
+    private long idEmprestimo;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)  
+    @JoinColumn(name = "id_usuario", nullable = true)  
     private Usuario usuario;  
 
     @ManyToOne
-    @JoinColumn(name = "id_livro", nullable = false) 
+    @JoinColumn(name = "id_livro", nullable = true) 
     private Livro livro;  
 
     @Column(name = "data_emprestimo", nullable = false)
@@ -43,12 +44,12 @@ public class Emprestimo {
     @Column(name = "data_devolucao_prevista", nullable = false)
     private LocalDate dataDevolucaoPrevista;
 
-    @Column(name = "data_devolucao_real", nullable = false)
+    @Column(name = "data_devolucao_real", nullable = true)
     private LocalDate dataDevolucaoReal;
 
     @Column(nullable = false)
     private String status;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Float multa;
 }

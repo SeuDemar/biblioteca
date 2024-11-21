@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class LivroDTO {
-    private Long id;
+    private Long idLivro;
     private String titulo;
     private String autor;
     private String editora;

@@ -23,7 +23,8 @@ public class Livro {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "id_livro")
+    private long idLivro;
 
     @Column(nullable = false)
     private String titulo;

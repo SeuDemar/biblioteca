@@ -1,5 +1,7 @@
 package com.biblioteca.biblioteca.presentation.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,26 +43,22 @@ public class EmprestimoController {
         }
     }
 
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<List<EmprestimoDTO>> buscarPorUsuario(@PathVariable Long idUsuario) {
+        try {
+            List<EmprestimoDTO> emprestimos = emprestimoService.listarPorIdUsuario(idUsuario);
+            return ResponseEntity.ok(emprestimos);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<EmprestimoDTO> buscarPorId(@PathVariable Long id) {
         try {
             EmprestimoDTO emprestimo = emprestimoService.buscarPorId(id);
             return ResponseEntity.ok(emprestimo);
         } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(null);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<EmprestimoDTO> buscarPorUsuario(@PathVariable Long idUsuario) {
-        try {
-            EmprestimoDTO emprestimo = emprestimoService.buscarPorId(idUsuario);
-            return ResponseEntity.ok(emprestimo);
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(null);
-        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }

@@ -5,9 +5,9 @@ import java.time.LocalDate;
 
 @Data
 public class EmprestimoDTO {
-    private long id;
-    private long idUsuario;
-    private long idLivro;
+    private long idEmprestimo;
+    private LivroDTO livroDTO;
+    private UsuarioDTO usuarioDTO;
     private LocalDate dataEmprestimo;
     private LocalDate dataDevolucaoPrevista;
     private LocalDate dataDevolucaoReal;

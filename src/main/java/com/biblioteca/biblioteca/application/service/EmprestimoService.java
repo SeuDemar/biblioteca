@@ -1,6 +1,8 @@
 package com.biblioteca.biblioteca.application.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +23,6 @@ public class EmprestimoService implements IEmprestimoService{
     @Autowired
     private Mappers emprestimoMapper;
     
-    // registrarEmprestimo
-    // atualizarEmprestimo
-    // listarTodosEmprestimos
 
     @Override
     public EmprestimoDTO registrarEmprestimo(EmprestimoDTO emprestimoDTO) {
@@ -63,14 +62,12 @@ public class EmprestimoService implements IEmprestimoService{
     }
 
     @Override
-    public EmprestimoDTO buscarPorUsuario(Long idUsuario) {
-        Optional<Emprestimo> emprestimo = emprestimoRepository.findById(idUsuario);
+    public List<EmprestimoDTO> listarPorIdUsuario(Long idUsuario) {
+        List<Emprestimo> emprestimos = emprestimoRepository.findByUsuarioIdUsuario(idUsuario);
 
-        if (emprestimo.isEmpty()) {
-            throw new CustomException("Emprestimo não encontrado com o ID de usuario: " + idUsuario);
-        }
-
-        return emprestimoMapper.EmprestimotoDto(emprestimo.get());
+        return emprestimos.stream()
+                .map(emprestimoMapper::EmprestimotoDto)
+                .collect(Collectors.toList());
     }
 
 }
