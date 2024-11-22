@@ -6,7 +6,7 @@ import com.biblioteca.biblioteca.domain.dto.EmprestimoDTO;
 
 public interface IEmprestimoService {
 
-    EmprestimoDTO buscarPorId(Long id);
+    EmprestimoDTO buscarPorId(Long idEmprestimo);
 
     List<EmprestimoDTO> listarPorIdUsuario(Long idUsuario);
 

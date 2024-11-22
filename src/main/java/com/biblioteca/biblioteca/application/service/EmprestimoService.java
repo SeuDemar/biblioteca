@@ -127,12 +127,12 @@ public class EmprestimoService implements IEmprestimoService{
         }
 
         Emprestimo emprestimo = emprestimoExistente.get();
-        int diasAtraso = (int) ChronoUnit.DAYS.between(emprestimo.getDataDevolucaoPrevista(), emprestimoAtualizado.getDataDevolucaoReal());
-        if (diasAtraso > 14) {
-            emprestimo.setMulta(emprestimo.getMulta() + (1 *diasAtraso));
+        int diasEntrega = (int) ChronoUnit.DAYS.between(emprestimo.getDataDevolucaoPrevista(), emprestimoAtualizado.getDataDevolucaoReal());
+        if (diasEntrega > 14) {
+            emprestimo.setMulta(emprestimo.getMulta() + (1 * diasEntrega));
         }
         emprestimo.setDataDevolucaoReal(emprestimoAtualizado.getDataDevolucaoReal());
-        emprestimo.setStatus(StatusEmprestimo.CONCLUIDO.name());  
+        emprestimo.setStatus(StatusEmprestimo.CONCLUIDO.name().toLowerCase());  
 
         Livro livro = emprestimo.getLivro();
         livro.setDisponibilidade(true);

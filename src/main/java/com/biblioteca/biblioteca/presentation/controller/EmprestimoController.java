@@ -72,10 +72,10 @@ public class EmprestimoController {
         }
     }
 
-    @PutMapping("/emprestimo/{idEmprestimo}")
-    public ResponseEntity<EmprestimoDTO> entregarLivro(@PathVariable Long id, @RequestBody EmprestimoDTO livroEntregue) {
+    @PutMapping("/{idEmprestimo}")
+    public ResponseEntity<EmprestimoDTO> entregarLivro(@PathVariable Long idEmprestimo, @RequestBody EmprestimoDTO livroEntregue) {
         try {
-            EmprestimoDTO updatedEmprestimo = emprestimoService.entregarLivro(id, livroEntregue);
+            EmprestimoDTO updatedEmprestimo = emprestimoService.entregarLivro(idEmprestimo, livroEntregue);
             return ResponseEntity.ok(updatedEmprestimo);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(null);

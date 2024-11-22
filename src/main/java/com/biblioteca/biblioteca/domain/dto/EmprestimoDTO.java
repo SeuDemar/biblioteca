@@ -3,6 +3,8 @@ package com.biblioteca.biblioteca.domain.dto;
 import lombok.Data;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Data
 public class EmprestimoDTO {
     private long idEmprestimo;
