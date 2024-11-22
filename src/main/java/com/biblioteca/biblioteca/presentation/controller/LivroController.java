@@ -76,18 +76,6 @@ public class LivroController {
         }
     }
 
-    @PutMapping("/{idLivro}")
-    public ResponseEntity<LivroDTO> atualizarLivro(@PathVariable Long idLivro, @RequestBody LivroDTO livroAtualizado) {
-        try {
-            LivroDTO updatedLivro = livroService.atualizarLivro(idLivro, livroAtualizado);
-            return ResponseEntity.ok(updatedLivro);
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(null);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
     @DeleteMapping("/{idLivro}")
     public ResponseEntity<Void> removerLivro(@PathVariable Long idLivro) {
         try {
@@ -100,6 +88,16 @@ public class LivroController {
         }
     }
 
-   
+    @PutMapping("/livro/{idLivro}")
+    public ResponseEntity<LivroDTO> atualizarLivro(@PathVariable Long idLivro, @RequestBody LivroDTO livroAtualizado) {
+        try {
+            LivroDTO updatedLivro = livroService.atualizarLivro(idLivro, livroAtualizado);
+            return ResponseEntity.ok(updatedLivro);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
 }
