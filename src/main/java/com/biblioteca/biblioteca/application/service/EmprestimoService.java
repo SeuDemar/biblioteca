@@ -1,5 +1,6 @@
 package com.biblioteca.biblioteca.application.service;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +22,8 @@ import com.biblioteca.biblioteca.shared.CustomException;
 import com.biblioteca.biblioteca.shared.StatusEmprestimo;
 
 @Service
-public class EmprestimoService implements IEmprestimoService{
-    
+public class EmprestimoService implements IEmprestimoService {
+
     @Autowired
     private IEmprestimoRepository emprestimoRepository;
 
@@ -34,7 +35,7 @@ public class EmprestimoService implements IEmprestimoService{
 
     @Autowired
     private Mappers emprestimoMapper;
-    
+
     @Override
     public EmprestimoDTO buscarPorId(Long id) {
         Optional<Emprestimo> emprestimo = emprestimoRepository.findById(id);
@@ -50,13 +51,12 @@ public class EmprestimoService implements IEmprestimoService{
     public List<EmprestimoDTO> listarTodosEmprestimos() {
         // Utiliza o repositório para pegar livros com disponibilidade true
         List<Emprestimo> emprestimoDisponiveis = emprestimoRepository.findAll();
-        
+
         // Converte os livros disponíveis para DTO
         return emprestimoDisponiveis.stream()
                 .map(emprestimoMapper::EmprestimotoDto)
                 .collect(Collectors.toList());
     }
-
 
     @Override
     public List<EmprestimoDTO> listarPorIdUsuario(Long idUsuario) {
@@ -75,19 +75,19 @@ public class EmprestimoService implements IEmprestimoService{
                 .map(emprestimoMapper::EmprestimotoDto)
                 .collect(Collectors.toList());
     }
-    
+
     @Override
     public EmprestimoDTO registrarEmprestimo(EmprestimoDTO emprestimoDTO) {
 
         Emprestimo emprestimo = emprestimoMapper.EmprestimoDTOtoEntity(emprestimoDTO);
-        
+
         Long livroId = emprestimo.getLivro().getIdLivro();
         Long usuarioId = emprestimo.getUsuario().getIdUsuario();
 
         Livro livro = livroRepository.findById(livroId)
-            .orElseThrow(() -> new CustomException("Livro não encontrado com o ID: " + livroId));
+                .orElseThrow(() -> new CustomException("Livro não encontrado com o ID: " + livroId));
         Usuario usuario = usuarioRepository.findById(usuarioId)
-            .orElseThrow(() -> new CustomException("Usuário não encontrado com o ID: " + usuarioId));
+                .orElseThrow(() -> new CustomException("Usuário não encontrado com o ID: " + usuarioId));
 
         if (!livro.isDisponibilidade() || usuario.getQuantidadeLivrosEmprestados() >= 5) {
             return null;
@@ -98,20 +98,18 @@ public class EmprestimoService implements IEmprestimoService{
         emprestimo.setDataDevolucaoReal(null);
         emprestimo.setStatus(StatusEmprestimo.ATIVO.name().toLowerCase());
 
-        emprestimo = emprestimoRepository.save(emprestimo);
-
-        
         livro.setDisponibilidade(false);
         livro.setAnoPublicacao(livro.getAnoPublicacao());
         livro.setAutor(livro.getAutor());
         livro.setEditora(livro.getEditora());
         livro.setTitulo(livro.getTitulo());
-        
+
         usuario.setQuantidadeLivrosEmprestados(usuario.getQuantidadeLivrosEmprestados() + 1);
         usuario.setDataCadastro(usuario.getDataCadastro());
         usuario.setNome(usuario.getNome());
         usuario.setEmail(usuario.getEmail());
 
+        emprestimo = emprestimoRepository.save(emprestimo);
         livroRepository.save(livro);
         usuarioRepository.save(usuario);
 
@@ -127,27 +125,32 @@ public class EmprestimoService implements IEmprestimoService{
         }
 
         Emprestimo emprestimo = emprestimoExistente.get();
-        int diasEntrega = (int) ChronoUnit.DAYS.between(emprestimo.getDataDevolucaoPrevista(), emprestimoAtualizado.getDataDevolucaoReal());
+
+        emprestimo.setDataDevolucaoReal(LocalDate.now());
+
+        int diasEntrega = (int) ChronoUnit.DAYS.between(emprestimo.getDataEmprestimo(),
+                emprestimoAtualizado.getDataDevolucaoReal()); 
+
         if (diasEntrega > 14) {
-            emprestimo.setMulta(emprestimo.getMulta() + (1 * diasEntrega));
+            emprestimo.setMulta(1.0f * (diasEntrega - 14));
         }
-        emprestimo.setDataDevolucaoReal(emprestimoAtualizado.getDataDevolucaoReal());
-        emprestimo.setStatus(StatusEmprestimo.CONCLUIDO.name().toLowerCase());  
+
+        emprestimo.setStatus(StatusEmprestimo.CONCLUIDO.name().toLowerCase());
 
         Livro livro = emprestimo.getLivro();
         livro.setDisponibilidade(true);
-        livroRepository.save(livro);
 
-        // Diminui a quantidade de livros do usuario
         Usuario usuario = emprestimo.getUsuario();
         usuario.setQuantidadeLivrosEmprestados(usuario.getQuantidadeLivrosEmprestados() - 1);
         usuario.setDataCadastro(usuario.getDataCadastro());
         usuario.setNome(usuario.getNome());
         usuario.setEmail(usuario.getEmail());
-        usuarioRepository.save(usuario);
 
+        livroRepository.save(livro);
+        usuarioRepository.save(usuario);
         emprestimo = emprestimoRepository.save(emprestimo);
 
         return emprestimoMapper.EmprestimotoDto(emprestimo);
     }
+
 }

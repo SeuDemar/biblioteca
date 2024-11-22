@@ -43,20 +43,6 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/{email}")
-public ResponseEntity<UsuarioDTO> buscarPorEmail(@PathVariable String email) {
-    try {
-        UsuarioDTO usuario = usuarioService.buscarPorEmail(email);
-        return ResponseEntity.ok(usuario);
-    } catch (CustomException e) {
-        return ResponseEntity.badRequest().body(null); 
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body(null); 
-    }
-}
-
-
     @PostMapping
     public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         try {
@@ -89,6 +75,18 @@ public ResponseEntity<UsuarioDTO> buscarPorEmail(@PathVariable String email) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UsuarioDTO> buscarPorEmail(@PathVariable String email) {
+        try {
+            UsuarioDTO usuario = usuarioService.buscarPorEmail(email);
+            return ResponseEntity.ok(usuario);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
