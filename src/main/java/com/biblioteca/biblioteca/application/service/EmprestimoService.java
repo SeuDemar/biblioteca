@@ -18,7 +18,6 @@ import com.biblioteca.biblioteca.domain.repository.ILivroRepository;
 import com.biblioteca.biblioteca.domain.repository.IUsuarioRepository;
 import com.biblioteca.biblioteca.domain.service.IEmprestimoService;
 import com.biblioteca.biblioteca.shared.CustomException;
-import com.biblioteca.biblioteca.shared.GlobalExceptionHandler;
 import com.biblioteca.biblioteca.shared.StatusEmprestimo;
 
 @Service
@@ -97,7 +96,7 @@ public class EmprestimoService implements IEmprestimoService{
         emprestimo.setDataEmprestimo(emprestimo.getDataEmprestimo());
         emprestimo.setDataDevolucaoPrevista(emprestimo.getDataEmprestimo().plusDays(14));
         emprestimo.setDataDevolucaoReal(null);
-        emprestimo.setStatus(StatusEmprestimo.ATIVO.name());  
+        emprestimo.setStatus(StatusEmprestimo.ATIVO.name().toLowerCase());
 
         emprestimo = emprestimoRepository.save(emprestimo);
 
@@ -120,11 +119,11 @@ public class EmprestimoService implements IEmprestimoService{
     }
 
     @Override
-    public EmprestimoDTO entregarLivro(Long id, EmprestimoDTO emprestimoAtualizado) {
-        Optional<Emprestimo> emprestimoExistente = emprestimoRepository.findById(id);
+    public EmprestimoDTO entregarLivro(Long idEmprestimo, EmprestimoDTO emprestimoAtualizado) {
+        Optional<Emprestimo> emprestimoExistente = emprestimoRepository.findById(idEmprestimo);
 
         if (emprestimoExistente.isEmpty()) {
-            throw new CustomException("Emprestimo não encontrado com o ID: " + id);
+            throw new CustomException("Emprestimo não encontrado com o ID: " + idEmprestimo);
         }
 
         Emprestimo emprestimo = emprestimoExistente.get();
