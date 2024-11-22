@@ -10,6 +10,7 @@ import com.biblioteca.biblioteca.domain.dto.EmprestimoDTO;
 import com.biblioteca.biblioteca.domain.service.IEmprestimoService;
 import com.biblioteca.biblioteca.shared.CustomException;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -21,6 +22,10 @@ public class EmprestimoController {
     private IEmprestimoService emprestimoService;
 
     @GetMapping("/{idEmprestimo}")
+    @Operation(
+        summary = "Listar um empréstimo",
+        description = "Endpoint que busca um empréstimo com o id informado."
+    )
     public ResponseEntity<EmprestimoDTO> buscarPorId(@PathVariable Long idEmprestimo) {
         try {
             EmprestimoDTO emprestimo = emprestimoService.buscarPorId(idEmprestimo);
@@ -32,6 +37,10 @@ public class EmprestimoController {
 
 
     @GetMapping
+    @Operation(
+        summary = "Listar todos os empréstimos",
+        description = "Endpoint que lista todos os empréstimos."
+    )
     public ResponseEntity<List<EmprestimoDTO>> listarTodosLivros() {
         try {
             List<EmprestimoDTO> emprestimo = emprestimoService.listarTodosEmprestimos();
@@ -42,6 +51,10 @@ public class EmprestimoController {
     }
 
     @GetMapping("/livro/{idLivro}")
+    @Operation(
+        summary = "Listar empréstimos de um livro",
+        description = "Endpoint que lista os empréstimos com o id de um livro."
+    )
     public ResponseEntity<List<EmprestimoDTO>> listarPorIdLivro(@PathVariable Long idLivro) {
         try {
             List<EmprestimoDTO> emprestimos = emprestimoService.listarPorIdLivro(idLivro);
@@ -53,6 +66,10 @@ public class EmprestimoController {
     
 
     @GetMapping("/usuario/{idUsuario}")
+    @Operation(
+        summary = "Listar empréstimos de um usuário",
+        description = "Endpoint que lista os empréstimos com o id de um usuário."
+    )
     public ResponseEntity<List<EmprestimoDTO>> listarPorIdUsuario(@PathVariable Long idUsuario) {
         try {
             List<EmprestimoDTO> emprestimos = emprestimoService.listarPorIdUsuario(idUsuario);
@@ -63,6 +80,10 @@ public class EmprestimoController {
     }
 
     @PostMapping
+    @Operation(
+        summary = "Registrar um empréstimo",
+        description = "Endpoint que cadastra um novo empréstimo."
+    )
     public ResponseEntity<EmprestimoDTO> registrarEmprestimo(@RequestBody EmprestimoDTO emprestimoDTO) {
         try {
             EmprestimoDTO savedEmprestimo = emprestimoService.registrarEmprestimo(emprestimoDTO);
@@ -73,9 +94,29 @@ public class EmprestimoController {
     }
 
     @PutMapping("/{idEmprestimo}")
+    @Operation(
+        summary = "Entregar um livro",
+        description = "Endpoint que atualiza a data de entrega e calcual multas, passando o ID do livro fornecido como parâmetro."
+    )
     public ResponseEntity<EmprestimoDTO> entregarLivro(@PathVariable Long idEmprestimo, @RequestBody EmprestimoDTO livroEntregue) {
         try {
             EmprestimoDTO updatedEmprestimo = emprestimoService.entregarLivro(idEmprestimo, livroEntregue);
+            return ResponseEntity.ok(updatedEmprestimo);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PutMapping("/{idEmprestimo}/renovado")
+    @Operation(
+        summary = "Renovar um livro",
+        description = "Endpoint que atualiza renova a data prevista de um livro passando o ID fornecido como parâmetro."
+    )
+    public ResponseEntity<EmprestimoDTO> renovarLivro(@PathVariable Long idEmprestimo, @RequestBody EmprestimoDTO livroRenovado) {
+        try {
+            EmprestimoDTO updatedEmprestimo = emprestimoService.renovarLivro(idEmprestimo, livroRenovado);
             return ResponseEntity.ok(updatedEmprestimo);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(null);

@@ -37,11 +37,11 @@ public class EmprestimoService implements IEmprestimoService {
     private Mappers emprestimoMapper;
 
     @Override
-    public EmprestimoDTO buscarPorId(Long id) {
-        Optional<Emprestimo> emprestimo = emprestimoRepository.findById(id);
+    public EmprestimoDTO buscarPorId(Long idEmprestimo) {
+        Optional<Emprestimo> emprestimo = emprestimoRepository.findById(idEmprestimo);
 
         if (emprestimo.isEmpty()) {
-            throw new CustomException("Livro não encontrado com o ID: " + id);
+            throw new CustomException("Livro não encontrado com o ID: " + idEmprestimo);
         }
 
         return emprestimoMapper.EmprestimotoDto(emprestimo.get());
@@ -89,25 +89,30 @@ public class EmprestimoService implements IEmprestimoService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new CustomException("Usuário não encontrado com o ID: " + usuarioId));
 
-        if (!livro.isDisponibilidade() || usuario.getQuantidadeLivrosEmprestados() >= 5) {
+        if (!livro.isDisponibilidade() || usuario.getQuantidadeLivrosEmprestados() >= 5 || usuario.isMultado()) {
             return null;
         }
 
-        emprestimo.setDataEmprestimo(emprestimo.getDataEmprestimo());
+        emprestimo.setIdEmprestimo(emprestimo.getIdEmprestimo());
+        emprestimo.setDataEmprestimo(LocalDate.now());
         emprestimo.setDataDevolucaoPrevista(emprestimo.getDataEmprestimo().plusDays(14));
         emprestimo.setDataDevolucaoReal(null);
         emprestimo.setStatus(StatusEmprestimo.ATIVO.name().toLowerCase());
+        emprestimo.setMulta(emprestimo.getMulta());
 
+        livro.setIdLivro(livro.getIdLivro());
         livro.setDisponibilidade(false);
         livro.setAnoPublicacao(livro.getAnoPublicacao());
         livro.setAutor(livro.getAutor());
         livro.setEditora(livro.getEditora());
         livro.setTitulo(livro.getTitulo());
 
+        usuario.setIdUsuario(usuario.getIdUsuario());
         usuario.setQuantidadeLivrosEmprestados(usuario.getQuantidadeLivrosEmprestados() + 1);
         usuario.setDataCadastro(usuario.getDataCadastro());
         usuario.setNome(usuario.getNome());
         usuario.setEmail(usuario.getEmail());
+        usuario.setMultado(usuario.isMultado());
 
         emprestimo = emprestimoRepository.save(emprestimo);
         livroRepository.save(livro);
@@ -125,8 +130,11 @@ public class EmprestimoService implements IEmprestimoService {
         }
 
         Emprestimo emprestimo = emprestimoExistente.get();
+        Usuario usuario = emprestimo.getUsuario();
+        Livro livro = emprestimo.getLivro();
 
         emprestimo.setDataDevolucaoReal(LocalDate.now());
+        emprestimo.setMulta(emprestimo.getMulta());
 
         int diasEntrega = (int) ChronoUnit.DAYS.between(emprestimo.getDataEmprestimo(),
                 emprestimoAtualizado.getDataDevolucaoReal()); 
@@ -135,16 +143,80 @@ public class EmprestimoService implements IEmprestimoService {
             emprestimo.setMulta(1.0f * (diasEntrega - 14));
         }
 
+        // Constantes convertidas em strings minusculas para manter o padrao do Banco de Dados
+        // Datas continuam as mesmas, menos a real, pois é registrada no momento do emprestimo
+        emprestimo.setIdEmprestimo(emprestimo.getIdEmprestimo());
         emprestimo.setStatus(StatusEmprestimo.CONCLUIDO.name().toLowerCase());
+        emprestimo.setDataDevolucaoPrevista(emprestimo.getDataDevolucaoPrevista());
+        emprestimo.setDataEmprestimo(emprestimo.getDataEmprestimo());
 
-        Livro livro = emprestimo.getLivro();
+        livro.setIdLivro(livro.getIdLivro());
         livro.setDisponibilidade(true);
-
-        Usuario usuario = emprestimo.getUsuario();
+        livro.setAnoPublicacao(livro.getAnoPublicacao());
+        livro.setAutor(livro.getAutor());
+        livro.setEditora(livro.getEditora());
+        livro.setTitulo(livro.getTitulo());
+        
+        usuario.setIdUsuario(usuario.getIdUsuario());
         usuario.setQuantidadeLivrosEmprestados(usuario.getQuantidadeLivrosEmprestados() - 1);
         usuario.setDataCadastro(usuario.getDataCadastro());
         usuario.setNome(usuario.getNome());
         usuario.setEmail(usuario.getEmail());
+        usuario.setMultado(false);
+
+
+        livroRepository.save(livro);
+        usuarioRepository.save(usuario);
+        emprestimo = emprestimoRepository.save(emprestimo);
+
+        return emprestimoMapper.EmprestimotoDto(emprestimo);
+    }
+
+    @Override
+    public EmprestimoDTO renovarLivro(Long idEmprestimo, EmprestimoDTO livroRenovado) {
+        Optional<Emprestimo> emprestimoExistente = emprestimoRepository.findById(idEmprestimo);
+
+        if (emprestimoExistente.isEmpty()) {
+            throw new CustomException("Emprestimo não encontrado com o ID: " + idEmprestimo);
+        }
+
+        Emprestimo emprestimo = emprestimoExistente.get();
+        Usuario usuario = emprestimo.getUsuario();
+        Livro livro = emprestimo.getLivro();
+
+        emprestimo.setDataDevolucaoReal(LocalDate.now());
+        emprestimo.setIdEmprestimo(emprestimo.getIdEmprestimo());
+
+        int diasEntrega = (int) ChronoUnit.DAYS.between(emprestimo.getDataEmprestimo(),
+                livroRenovado.getDataDevolucaoReal()); 
+
+        if (diasEntrega > 14 || usuario.isMultado()) {
+            emprestimo.setStatus(StatusEmprestimo.EM_ATRASO.name().toLowerCase());
+            return null;
+        }
+
+        // Constantes convertidas em strings minusculas para manter o padrao do Banco de Dados
+        // Datas continuam as mesmas, menos a real, pois é registrada no momento do emprestimo
+        emprestimo.setStatus(StatusEmprestimo.ATIVO.name().toLowerCase());
+        emprestimo.setDataDevolucaoPrevista(emprestimo.getDataDevolucaoReal().plusDays(14));
+        emprestimo.setDataEmprestimo(emprestimo.getDataEmprestimo());
+        emprestimo.setMulta(emprestimo.getMulta());
+        emprestimo.setStatus(StatusEmprestimo.ATIVO.name().toLowerCase());
+
+        livro.setIdLivro(livro.getIdLivro());
+        livro.setDisponibilidade(true);
+        livro.setAnoPublicacao(livro.getAnoPublicacao());
+        livro.setAutor(livro.getAutor());
+        livro.setEditora(livro.getEditora());
+        livro.setTitulo(livro.getTitulo());
+
+        usuario.setIdUsuario(usuario.getIdUsuario());
+        usuario.setQuantidadeLivrosEmprestados(usuario.getQuantidadeLivrosEmprestados());
+        usuario.setDataCadastro(usuario.getDataCadastro());
+        usuario.setNome(usuario.getNome());
+        usuario.setEmail(usuario.getEmail());
+        usuario.setMultado(usuario.isMultado());
+
 
         livroRepository.save(livro);
         usuarioRepository.save(usuario);

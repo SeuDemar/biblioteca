@@ -44,10 +44,9 @@ public class LivroService implements ILivroService {
 
     @Override
     public List<LivroDTO> listarLivrosDisponiveis() {
-        // Utiliza o repositório para pegar livros com disponibilidade true
+
         List<Livro> livrosDisponiveis = livroRepository.findByDisponibilidadeTrue();
         
-        // Converte os livros disponíveis para DTO
         return livrosDisponiveis.stream()
                 .map(livroMapper::LivrotoDto)
                 .collect(Collectors.toList());
@@ -78,6 +77,11 @@ public class LivroService implements ILivroService {
     public LivroDTO cadastrarLivro(LivroDTO livroDTO) {
    
         Livro livro = livroMapper.LivroDTOtoEntity(livroDTO);
+
+        // ID definido como zero para não causar insconsistência, já que o ID é gerado pelo hibernates
+        livro.setIdLivro(0);
+        livro.setDisponibilidade(true);
+
         livro = livroRepository.save(livro);
 
         return livroMapper.LivrotoDto(livro);
@@ -92,9 +96,15 @@ public class LivroService implements ILivroService {
             throw new CustomException("Livro não encontrado com o ID: " + id);
         }
 
+        // Deixei alterações apenas da editora e do ano, pois geralmente titulo e autor não são alterados, pelo menos não nesse contexto.
+        // Claro q isso depende de casos e casos, mas esse é o mais pertinento por enquanto
         Livro livro = livroExistente.get();
-        livro.setTitulo(livroAtualizado.getTitulo());
-        livro.setAutor(livroAtualizado.getAutor());
+        livro.setTitulo(livro.getTitulo());
+        livro.setAutor(livro.getAutor());
+        livro.setDisponibilidade(livro.isDisponibilidade());
+        
+        livro.setEditora(livroAtualizado.getEditora());
+        livro.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
 
         livro = livroRepository.save(livro);
 

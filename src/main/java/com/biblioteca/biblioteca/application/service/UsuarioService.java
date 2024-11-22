@@ -1,6 +1,7 @@
 package com.biblioteca.biblioteca.application.service;
 
 import java.util.stream.Collectors;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +53,6 @@ public class UsuarioService implements IUsuarioService {
             throw new CustomException("Usuário não encontrado com o email: " + email);
         }
 
-
         return usuarioMapper.UsuariotoDto(usuario.get());
     }
 
@@ -60,8 +60,16 @@ public class UsuarioService implements IUsuarioService {
     public UsuarioDTO cadastrarUsuario(UsuarioDTO usuarioDTO) {
     
         Usuario usuario = usuarioMapper.UsuarioDTOtoEntity(usuarioDTO);
-        usuario = usuarioRepository.save(usuario);
 
+        // ID definido como zero para não causar insconsistência, já que o ID é gerado pelo hibernates
+        // Data de cadastro é feita no dia de hoje independento do caso, pois cadastro é cadastro é não deve ter inconsistência
+        // Quantidade de livros emprestados inicia em zero, pois o emprestimo administra esse valor
+        usuario.setIdUsuario(0);
+        usuario.setDataCadastro(LocalDate.now());
+        usuario.setQuantidadeLivrosEmprestados(0);
+        usuario.setMultado(false);
+
+        usuario = usuarioRepository.save(usuario);
 
         return usuarioMapper.UsuariotoDto(usuario);
     }
@@ -76,8 +84,15 @@ public class UsuarioService implements IUsuarioService {
         }
 
         Usuario usuario = usuarioExistente.get();
+
+        // Permitido a alteração apenas do nome e email, o resto deve ser consistente e imutavel
         usuario.setNome(usuarioAtualizado.getNome());
         usuario.setEmail(usuarioAtualizado.getEmail());
+
+        usuario.setDataCadastro(usuario.getDataCadastro());
+        usuario.setIdUsuario(usuario.getIdUsuario());
+        usuario.setQuantidadeLivrosEmprestados(usuario.getQuantidadeLivrosEmprestados());
+        usuario.setMultado(usuario.isMultado());
 
         usuario = usuarioRepository.save(usuario);
 

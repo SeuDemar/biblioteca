@@ -38,4 +38,7 @@ public class Usuario {
 
     @Column(name = "quantidade_livros_emprestados", nullable = false)
     private int quantidadeLivrosEmprestados;
+
+    @Column(nullable = false)
+    private boolean multado;
 }

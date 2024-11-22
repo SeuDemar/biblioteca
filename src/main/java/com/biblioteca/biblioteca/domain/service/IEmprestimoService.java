@@ -18,4 +18,6 @@ public interface IEmprestimoService {
 
     EmprestimoDTO entregarLivro(Long id, EmprestimoDTO livroEntregue);
 
+    EmprestimoDTO renovarLivro(Long id, EmprestimoDTO livroRenovado);
+
 }
