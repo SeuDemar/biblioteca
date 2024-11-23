@@ -13,6 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// Entidades que serão expostas ao banco de dados, algumas informações alteradas para fazer jus ao banco
+// Entidade diferente das outras pois possuí um boolean "multado"
+
 @Entity
 @Table(name = "usuario")
 @Getter

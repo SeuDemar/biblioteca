@@ -21,6 +21,9 @@ import com.biblioteca.biblioteca.domain.service.IEmprestimoService;
 import com.biblioteca.biblioteca.shared.CustomException;
 import com.biblioteca.biblioteca.shared.StatusEmprestimo;
 
+// Local onde fica a lógica de serviço fica escondida
+// Feita de forma simples a fim de melhorar futuramente
+
 @Service
 public class EmprestimoService implements IEmprestimoService {
 
@@ -102,6 +105,7 @@ public class EmprestimoService implements IEmprestimoService {
             return null;
         }
 
+        // Vários seters pra não permitir alterar o objeto dentro do json do empréstimo
         emprestimo.setIdEmprestimo(emprestimo.getIdEmprestimo());
         emprestimo.setDataEmprestimo(emprestimo.getDataEmprestimo());
         emprestimo.setDataDevolucaoPrevista(emprestimo.getDataEmprestimo().plusDays(14));

@@ -14,6 +14,9 @@ import com.biblioteca.biblioteca.domain.repository.ILivroRepository;
 import com.biblioteca.biblioteca.domain.service.ILivroService;
 import com.biblioteca.biblioteca.shared.CustomException;
 
+// Local onde fica a lógica de serviço fica escondida
+// Feita de forma simples a fim de melhorar futuramente
+
 @Service
 public class LivroService implements ILivroService {
     

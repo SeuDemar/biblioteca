@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.biblioteca.biblioteca.domain.dto.EmprestimoDTO;
 
+// Service que possuí os métodos que vão ser expostos nas controllers
+
 public interface IEmprestimoService {
 
     EmprestimoDTO buscarPorId(Long idEmprestimo);

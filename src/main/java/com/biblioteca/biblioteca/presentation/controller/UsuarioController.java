@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
+// Controller que irá controlar as nossas requisições HTTPS
+
 @RestController
 @RequestMapping("api/usuarios")
 @Tag(name = "Usuario", description = "APIs relacionadas a Usuários")

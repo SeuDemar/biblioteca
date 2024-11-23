@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+// Configuração do swagger para receber a API
+
 @Configuration
 public class SwaggerConfig implements WebMvcConfigurer {
 

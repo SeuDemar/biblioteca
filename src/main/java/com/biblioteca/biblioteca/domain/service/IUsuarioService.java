@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.biblioteca.biblioteca.domain.dto.UsuarioDTO;
 
+// Service que possuí os métodos que vão ser expostos nas controllers
+
 public interface IUsuarioService {
     
     UsuarioDTO buscarPorId(Long idEmprestimo);

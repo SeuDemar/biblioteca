@@ -14,6 +14,8 @@ import com.biblioteca.biblioteca.shared.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+// Controller que irá controlar as nossas requisições HTTPS
+
 @RestController
 @RequestMapping("api/emprestimo")
 @Tag(name = "Emprestimos", description = "APIs relacionadas aos empréstimos")

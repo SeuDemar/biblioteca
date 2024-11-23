@@ -4,6 +4,9 @@ import java.time.LocalDate;
 
 import lombok.Data;
 
+// DTO que irá manipular os dados recebidos a fim de não deixar exposto as nossas entidades
+
+
 @Data
 public class UsuarioDTO {
     private Long idUsuario;

@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.biblioteca.biblioteca.domain.dto.LivroDTO;
 
+// Service que possuí os métodos que vão ser expostos nas controllers
+
 public interface ILivroService {
     
     LivroDTO buscarPorId(Long id);

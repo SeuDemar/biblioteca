@@ -15,6 +15,9 @@ import com.biblioteca.biblioteca.domain.repository.IUsuarioRepository;
 import com.biblioteca.biblioteca.domain.service.IUsuarioService;
 import com.biblioteca.biblioteca.shared.CustomException;
 
+// Local onde fica a lógica de serviço fica escondida
+// Feita de forma simples a fim de melhorar futuramente
+
 @Service
 public class UsuarioService implements IUsuarioService {
 
