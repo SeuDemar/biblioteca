@@ -24,6 +24,7 @@ import com.biblioteca.biblioteca.shared.StatusEmprestimo;
 @Service
 public class EmprestimoService implements IEmprestimoService {
 
+    // injeção de dependências dos repositórios
     @Autowired
     private IEmprestimoRepository emprestimoRepository;
 
@@ -71,6 +72,14 @@ public class EmprestimoService implements IEmprestimoService {
     public List<EmprestimoDTO> listarPorIdLivro(Long idLivro) {
         List<Emprestimo> emprestimos = emprestimoRepository.findByLivroIdLivro(idLivro);
 
+        return emprestimos.stream()
+                .map(emprestimoMapper::EmprestimotoDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EmprestimoDTO> buscarPorDataDevolucaoPrevista(LocalDate dataDevolucaoPrevista) {
+        List<Emprestimo> emprestimos = emprestimoRepository.findByDataDevolucaoPrevista(dataDevolucaoPrevista);
         return emprestimos.stream()
                 .map(emprestimoMapper::EmprestimotoDto)
                 .collect(Collectors.toList());

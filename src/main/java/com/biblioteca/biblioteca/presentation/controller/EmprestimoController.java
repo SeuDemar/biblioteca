@@ -1,5 +1,6 @@
 package com.biblioteca.biblioteca.presentation.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,19 @@ public class EmprestimoController {
         }
     }
 
+    @GetMapping("/emprestimo/{dataDevolucaoPrevista}")
+    @Operation(
+        summary = "Listar empréstimos de um usuário",
+        description = "Endpoint que lista os empréstimos com o id de um usuário."
+    )
+    public ResponseEntity<List<EmprestimoDTO>> buscarPorDataDevolucaoPrevista(@PathVariable LocalDate dataDevolucaoPrevista) {
+        try {
+            List<EmprestimoDTO> emprestimos = emprestimoService.buscarPorDataDevolucaoPrevista(dataDevolucaoPrevista);
+            return ResponseEntity.ok(emprestimos);
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
     @GetMapping
     @Operation(
