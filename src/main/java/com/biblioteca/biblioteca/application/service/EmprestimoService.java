@@ -94,7 +94,7 @@ public class EmprestimoService implements IEmprestimoService {
         }
 
         emprestimo.setIdEmprestimo(emprestimo.getIdEmprestimo());
-        emprestimo.setDataEmprestimo(LocalDate.now());
+        emprestimo.setDataEmprestimo(emprestimo.getDataEmprestimo());
         emprestimo.setDataDevolucaoPrevista(emprestimo.getDataEmprestimo().plusDays(14));
         emprestimo.setDataDevolucaoReal(null);
         emprestimo.setStatus(StatusEmprestimo.ATIVO.name().toLowerCase());
@@ -191,7 +191,11 @@ public class EmprestimoService implements IEmprestimoService {
                 livroRenovado.getDataDevolucaoReal()); 
 
         if (diasEntrega > 14 || usuario.isMultado()) {
+            // entrega em atraso, acertar o status na entrega do livro
             emprestimo.setStatus(StatusEmprestimo.EM_ATRASO.name().toLowerCase());
+            // O usuário será multado ainda não esteja com multas, e o preço da multa é acertado na entrega
+            // Não poderá renovar livros enquanto tem multas
+            usuario.setMultado(true);
             return null;
         }
 
@@ -202,6 +206,7 @@ public class EmprestimoService implements IEmprestimoService {
         emprestimo.setDataEmprestimo(emprestimo.getDataEmprestimo());
         emprestimo.setMulta(emprestimo.getMulta());
         emprestimo.setStatus(StatusEmprestimo.ATIVO.name().toLowerCase());
+        emprestimo.setDataDevolucaoReal(null);
 
         livro.setIdLivro(livro.getIdLivro());
         livro.setDisponibilidade(true);

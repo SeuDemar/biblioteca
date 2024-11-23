@@ -1,12 +1,15 @@
 package com.biblioteca.biblioteca.presentation.controller;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.biblioteca.biblioteca.domain.dto.EmprestimoDTO;
+import com.biblioteca.biblioteca.domain.entity.Emprestimo;
 import com.biblioteca.biblioteca.domain.service.IEmprestimoService;
 import com.biblioteca.biblioteca.shared.CustomException;
 
@@ -124,4 +127,5 @@ public class EmprestimoController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
 }
